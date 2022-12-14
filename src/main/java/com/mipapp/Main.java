@@ -6,8 +6,6 @@ import java.sql.*;
 public class Main {
     public static void main(String [] args) throws SQLException {
 
-        System.out.println("Hello works");
-
         DatabaseController dbc = new DatabaseController();
 //        User n = new User("admin","admin","admin");
 //        dbc.insertUser(n);
@@ -15,8 +13,8 @@ public class Main {
         //        dbc.getUserById(1);
 
         //UPDATE TESTED
-        User n = new User("vlad","vlad2","vlad");
-        dbc.insertUser(n);
+        User n = new User("vlad","vlad2","vladd");
+        dbc.login(n.getUsername(), n.getPassword());
 
     }
 }

@@ -1,7 +1,5 @@
 package com.mipapp;
 
-import org.postgresql.util.PSQLException;
-
 import java.sql.*;
 import java.util.LinkedList;
 
@@ -11,7 +9,7 @@ public class DatabaseController {
     private final String user = "postgres";
     private final String password = "postgres";
 
-    public void insertUser(User u) throws SQLException, PSQLException {
+    public void insertUser(User u) throws SQLException {
 
         String INSERT_USERS_SQL = "INSERT INTO users (name, username, password) VALUES (?, ?, ?);";
 
@@ -169,6 +167,51 @@ public class DatabaseController {
                     t = t.getCause();
                 }
             }
+        }
+    }
+
+    private User getUserByUsername(String _username){
+        final String QUERY = "select id,name, username, password from Users where username =?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             // Step 2:Create a statement using connection object
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY);) {
+            preparedStatement.setString(1, _username);
+            System.out.println(preparedStatement);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                System.out.println(id + "," + name + "," + username + "," + password);
+                User res = new User(name, username, password);
+                return res;
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+
+        return null;
+    }
+    public User login(String _username, String _password) {
+        User find = getUserByUsername(_username);
+        if(find == null)
+        {
+            System.out.println("User not found");
+            return null; //to throw USER NOT FOUND ERROR
+        }
+        if(_password.equals(find.getPassword()))
+        {
+            System.out.println("Logged In");
+            return find;
+        }
+        else{
+            System.out.println("Password doesn't match");
+            return null; //to throw WRONG PASSWORD ERROR
         }
     }
 }
