@@ -1,5 +1,6 @@
 package com.mipapp;
 
+
 import java.sql.*;
 
 public class Main {
@@ -14,7 +15,8 @@ public class Main {
         //        dbc.getUserById(1);
 
         //UPDATE TESTED
-//        User n = new User("vlad","vlad","vlad");
-//        dbc.updateUser(3,n);
+        User n = new User("vlad","vlad2","vlad");
+        dbc.insertUser(n);
+
     }
 }

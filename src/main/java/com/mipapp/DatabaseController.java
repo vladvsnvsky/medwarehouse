@@ -1,5 +1,7 @@
 package com.mipapp;
 
+import org.postgresql.util.PSQLException;
+
 import java.sql.*;
 import java.util.LinkedList;
 
@@ -9,7 +11,7 @@ public class DatabaseController {
     private final String user = "postgres";
     private final String password = "postgres";
 
-    public void insertUser(User u) throws SQLException {
+    public void insertUser(User u) throws SQLException, PSQLException {
 
         String INSERT_USERS_SQL = "INSERT INTO users (name, username, password) VALUES (?, ?, ?);";
 

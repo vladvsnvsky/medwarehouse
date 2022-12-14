@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 group 'com.mipapp'
@@ -15,6 +17,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.1'
 
+}
+
+javafx {
+    version = "19"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 test {
