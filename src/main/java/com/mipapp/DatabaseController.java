@@ -214,4 +214,33 @@ public class DatabaseController {
             return null; //to throw WRONG PASSWORD ERROR
         }
     }
+
+    public static void insertProduct(Product p) throws SQLException {
+
+        String INSERT_USERS_SQL = "INSERT INTO products (pzn, supplier, name, strength, package_size, unit ) VALUES (?, ?, ?, ?, ?, ?);";
+
+        System.out.println(INSERT_USERS_SQL);
+        // Step 1: Establishing a Connection
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost/medwarehouse", "postgres", "postgres");
+
+             // Step 2:Create a statement using connection object
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
+            preparedStatement.setString(1, p.getPzn());
+            preparedStatement.setString(2, p.getSupplier());
+            preparedStatement.setString(3, p.getName());
+            preparedStatement.setString(4, p.getStrength());
+            preparedStatement.setInt(5, p.getPackageSize());
+            preparedStatement.setString(6, p.getUnit());
+
+            System.out.println(preparedStatement);
+            // Step 3: Execute the query or update query
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+
+            // print SQL exception information
+            printSQLException(e);
+        }
+
+        // Step 4: try-with-resource statement will auto close the connection.
+    }
 }
