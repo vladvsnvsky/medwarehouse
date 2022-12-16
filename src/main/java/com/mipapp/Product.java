@@ -10,6 +10,9 @@ public class Product {
     private int packageSize;
     private String unit= null;
 
+    public Product() {
+    }
+
     public Product(String pzn, String supplier, String name, String strength, int packageSize, String unit) {
         this.pzn = pzn;
         this.supplier = supplier;

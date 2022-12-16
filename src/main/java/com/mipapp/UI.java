@@ -6,9 +6,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -249,6 +248,11 @@ public class UI extends Application {
             if(current != null){
                 //go to the crud page
                 showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Login Successful!", "Welcome " + usernameField.getText());
+                Scene crudScene;
+                crudScene = buildCrudScene(current);
+                this.currentStage.setScene(crudScene);
+                this.currentStage.show();
+
                 return;
             }
 
@@ -257,6 +261,131 @@ public class UI extends Application {
 
         return gridPane;
     }
+
+    Scene buildCrudScene(User u){
+        TableView<Product> table = new TableView<>();
+        TextField idField;
+        TextField pznField;
+        TextField supplierField;
+        TextField productNameField;
+        TextField strengthField;
+        TextField packageSizeField;
+        TextField unitField;
+        Button addButton;
+        Button deleteButton;
+        Button updateButton;
+
+        TableColumn<Product, Integer> idColumn = new TableColumn<>("ID");
+        idColumn.setMinWidth(100);
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn<Product, Integer> pznColumn = new TableColumn<>("PZN");
+        pznColumn.setMinWidth(100);
+        pznColumn.setCellValueFactory(new PropertyValueFactory<>("pzn"));
+
+        TableColumn<Product, String> supplierColumn = new TableColumn<>("Supplier");
+        supplierColumn.setMinWidth(200);
+        supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplier"));
+
+        TableColumn<Product, String> productNameColumn = new TableColumn<>("Product Name");
+        productNameColumn.setMinWidth(200);
+        productNameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
+
+        TableColumn<Product, String> strengthColumn = new TableColumn<>("Strength");
+        strengthColumn.setMinWidth(100);
+        strengthColumn.setCellValueFactory(new PropertyValueFactory<>("strength"));
+
+        TableColumn<Product, Integer> packageSizeColumn = new TableColumn<>("Package Size");
+        packageSizeColumn.setMinWidth(100);
+        packageSizeColumn.setCellValueFactory(new PropertyValueFactory<>("packageSize"));
+
+        TableColumn<Product, String> unitColumn = new TableColumn<>("Unit");
+        unitColumn.setMinWidth(100);
+        unitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
+
+        // Create table
+//        table.setItems(DatabaseController.getAllProducts());
+//        table.getColumns().addAll(idColumn, pznColumn, supplierColumn, productNameColumn, strengthColumn, packageSizeColumn, unitColumn);
+
+        // Create input fields and buttons
+        idField = new TextField();
+        idField.setPromptText("ID");
+        idField.setMinWidth(100);
+
+        pznField = new TextField();
+        pznField.setPromptText("PZN");
+        pznField.setMinWidth(100);
+
+        supplierField = new TextField();
+        supplierField.setPromptText("Supplier");
+        supplierField.setMinWidth(200);
+
+        productNameField = new TextField();
+        productNameField.setPromptText("Product Name");
+        productNameField.setMinWidth(200);
+
+        strengthField = new TextField();
+        strengthField.setPromptText("Strength");
+        strengthField.setMinWidth(100);
+
+        packageSizeField = new TextField();
+        packageSizeField.setPromptText("Package Size");
+        packageSizeField.setMinWidth(100);
+
+        unitField = new TextField();
+        unitField.setPromptText("Unit");
+        unitField.setMinWidth(100);
+
+        addButton = new Button("Add");
+        addButton.setOnAction(e -> {
+            Product p = new Product();
+            p.setName(productNameField.getText());
+            p.setPzn(pznField.getText());
+            p.setSupplier(supplierField.getText());
+            p.setStrength(strengthField.getText());
+            p.setPackageSize(Integer.parseInt(packageSizeField.getText()));
+            p.setUnit(unitField.getText());
+            try {
+                DatabaseController.insertProduct(p);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            table.getItems().add(p);
+            idField.clear();
+            pznField.clear();
+            supplierField.clear();
+            productNameField.clear();
+            strengthField.clear();
+            packageSizeField.clear();
+            unitField.clear();
+        });
+        deleteButton = new Button("Delete");
+//        deleteButton.setOnAction(e -> deleteButtonClicked());
+        updateButton = new Button("Update");
+//        updateButton.setOnAction(e -> updateButtonClicked());
+
+        // Create layout
+        HBox inputFields = new HBox();
+        inputFields.setPadding(new Insets(10, 10, 10, 10));
+        inputFields.setSpacing(10);
+        inputFields.getChildren().addAll(idField, pznField, supplierField, productNameField, strengthField, packageSizeField, unitField);
+
+        HBox buttons = new HBox();
+        buttons.setPadding(new Insets(10, 10, 10, 10));
+        buttons.setSpacing(10);
+        buttons.getChildren().addAll(addButton, deleteButton, updateButton);
+
+        VBox layout = new VBox();
+        layout.getChildren().addAll(table, inputFields, buttons);
+
+        // Create scene and stage
+        Scene scene = new Scene(layout);
+
+        return scene;
+    }
+
+    // Add button clicked
+
 
     private void showAlert(Alert.AlertType error, Window owner, String alertTitle, String message) {
         Alert alert = new Alert(error);

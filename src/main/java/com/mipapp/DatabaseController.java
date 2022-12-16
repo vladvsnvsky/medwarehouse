@@ -1,5 +1,7 @@
 package com.mipapp;
 
+import javafx.collections.ObservableList;
+
 import java.sql.*;
 import java.util.LinkedList;
 
@@ -8,6 +10,8 @@ public class DatabaseController {
     private final String url = "jdbc:postgresql://localhost/medwarehouse";
     private final String user = "postgres";
     private final String password = "postgres";
+
+
 
     public void insertUser(User u) throws SQLException {
 
